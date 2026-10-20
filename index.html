@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZALORA Wireframe Prototype</title>
+  <title>ZALORA Wireframe Prototype - Interactive & Extended</title>
   <style>
     /* Global Reset & Typography */
     * {
@@ -63,6 +63,7 @@
       font-weight: 900;
       font-size: 20px;
       letter-spacing: 2px;
+      cursor: pointer;
     }
 
     .cart-wrapper {
@@ -112,6 +113,39 @@
       color: #777777;
     }
 
+    /* Category Navigation Bar (Desktop ref inspired: WOMEN, MEN, KIDS, LUXURY, BEAUTY, SPORTS, FASHION) */
+    .category-scroll-bar {
+      display: flex;
+      overflow-x: auto;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 0 12px;
+      flex-shrink: 0;
+      scrollbar-width: none; /* Firefox */
+    }
+    .category-scroll-bar::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
+    }
+
+    .cat-pill {
+      padding: 10px 12px;
+      background: none;
+      border: none;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      white-space: nowrap;
+      cursor: pointer;
+      color: #555555;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .cat-pill.active {
+      color: #111111;
+      border-bottom-color: #111111;
+    }
+
     /* Sticky Floating Navigation & My Size Bar */
     .sub-header-container {
       background-color: #ffffff;
@@ -126,7 +160,7 @@
 
     .nav-target {
       flex: 1;
-      padding: 12px 0;
+      padding: 10px 0;
       text-align: center;
       font-size: 13px;
       font-weight: 600;
@@ -235,11 +269,18 @@
       display: flex;
       flex-direction: column;
       background-color: #ffffff;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+
+    .product-card:hover {
+      border-color: #000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
     .image-placeholder {
       width: 100%;
-      height: 150px;
+      height: 140px;
       background-color: #e5e5e5;
       border: 1px dashed #777777;
       display: flex;
@@ -332,21 +373,26 @@
       flex-direction: column;
       align-items: center;
       text-decoration: none;
-      color: #111111;
+      color: #777;
       font-size: 10px;
       font-weight: 600;
       gap: 2px;
       background: none;
       border: none;
       cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active, .nav-item:hover {
+      color: #111111;
     }
 
     .nav-icon {
       font-size: 16px;
     }
 
-    /* SCREEN 2: Slide-out Filter Drawer (Overlay) */
-    .drawer-overlay {
+    /* OVERLAYS & MODALS GENERAL */
+    .drawer-overlay, .modal-overlay {
       position: absolute;
       top: 0;
       left: 0;
@@ -356,14 +402,15 @@
       z-index: 100;
       visibility: hidden;
       opacity: 0;
-      transition: opacity 0.08s ease-out, visibility 0.08s ease-out; /* <0.1s threshold */
+      transition: opacity 0.08s ease-out, visibility 0.08s ease-out;
     }
 
-    .drawer-overlay.active {
+    .drawer-overlay.active, .modal-overlay.active {
       visibility: visible;
       opacity: 1;
     }
 
+    /* SLIDE-OUT FILTER DRAWER */
     .drawer-content {
       position: absolute;
       top: 0;
@@ -374,7 +421,7 @@
       border-left: 2px solid #111111;
       display: flex;
       flex-direction: column;
-      transition: right 0.08s ease-out; /* <0.1s threshold */
+      transition: right 0.08s ease-out;
       box-shadow: -4px 0 16px rgba(0,0,0,0.2);
     }
 
@@ -382,14 +429,13 @@
       right: 0;
     }
 
-    /* Drawer Header */
     .drawer-header {
       height: 52px;
       padding: 0 16px;
       border-bottom: 1px solid #111111;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
       flex-shrink: 0;
       background-color: #ffffff;
     }
@@ -407,7 +453,6 @@
       gap: 6px;
     }
 
-    /* Accordion Stack */
     .accordion-stack {
       flex: 1;
       overflow-y: auto;
@@ -441,7 +486,6 @@
       display: block;
     }
 
-    /* Sizing Checkbox Grid */
     .size-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -467,7 +511,6 @@
       height: 14px;
     }
 
-    /* Drawer Footer Action */
     .drawer-footer {
       padding: 16px;
       border-top: 1px solid #111111;
@@ -488,9 +531,127 @@
       text-transform: uppercase;
       border-radius: 2px;
     }
+
+    /* SORT BY MODAL / BOTTOM SHEET */
+    .sort-sheet {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      background-color: #ffffff;
+      border-top: 2px solid #111111;
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      flex-direction: column;
+      transition: bottom 0.2s ease-out;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
+    }
+
+    .drawer-overlay.sort-active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .drawer-overlay.sort-active .sort-sheet {
+      bottom: 0;
+    }
+
+    .sort-header {
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sort-option {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+      font-weight: 600;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+    .sort-option:hover {
+      background-color: #f9f9f9;
+    }
+
+    /* CATEGORY DRAWER (LEFT SIDE) */
+    .left-drawer-content {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 80%;
+      height: 100%;
+      background-color: #ffffff;
+      border-right: 2px solid #111111;
+      display: flex;
+      flex-direction: column;
+      transition: left 0.08s ease-out;
+      box-shadow: 4px 0 16px rgba(0,0,0,0.2);
+    }
+    .drawer-overlay.left-active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .drawer-overlay.left-active .left-drawer-content {
+      left: 0;
+    }
+
+    .menu-link-item {
+      padding: 16px;
+      border-bottom: 1px solid #eee;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: none;
+      border-top: none; border-left: none; border-right: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+    }
+    .menu-link-item:hover {
+      background-color: #f5f5f5;
+    }
+
+    /* NOTIFICATION TOAST */
+    .toast {
+      position: absolute;
+      top: 64px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background-color: #111111;
+      color: #ffffff;
+      padding: 8px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      z-index: 1000;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
   </style>
 </head>
 <body>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toastMessage">Action completed successfully</div>
 
   <!-- Mobile Phone Container Viewport Frame -->
   <div class="phone-container">
@@ -499,23 +660,34 @@
     
     <!-- Top Bar Component -->
     <header class="top-bar">
-      <button class="top-bar-icon" aria-label="Category Drawer Menu">≡</button>
-      <div class="brand-logo">ZALORA</div>
-      <button class="cart-wrapper" aria-label="Shopping Cart">
+      <button class="top-bar-icon" id="menuDrawerBtn" aria-label="Category Drawer Menu">≡</button>
+      <div class="brand-logo" id="brandLogoBtn">ZALORA</div>
+      <button class="cart-wrapper" id="cartNavBtn" aria-label="Shopping Cart">
         🛒
-        <span class="cart-badge">2</span>
+        <span class="cart-badge" id="cartCountBadge">2</span>
       </button>
     </header>
 
     <!-- Search Box Block -->
     <div class="search-block">
-      <input type="text" class="search-input" placeholder="Search brands, types, styles..." />
+      <input type="text" class="search-input" id="mainSearchInput" placeholder="Search brands, types, styles..." />
     </div>
+
+    <!-- Horizontal Category Scroll Bar (Updated with FASHION besides SPORTS) -->
+    <nav class="category-scroll-bar" id="categoryButtonBar">
+      <button class="cat-pill active" data-cat="women">Women</button>
+      <button class="cat-pill" data-cat="men">Men</button>
+      <button class="cat-pill" data-cat="kids">Kids</button>
+      <button class="cat-pill" data-cat="luxury">Luxury</button>
+      <button class="cat-pill" data-cat="beauty">Beauty</button>
+      <button class="cat-pill" data-cat="sports">Sports</button>
+      <button class="cat-pill" data-cat="fashion">Fashion</button>
+    </nav>
 
     <!-- Floating Navigation & My Size Header -->
     <div class="sub-header-container">
       <div class="floating-nav">
-        <button class="nav-target">[↕ Sort By]</button>
+        <button class="nav-target" id="openSortBtn">[↕ Sort By]</button>
         <button class="nav-target" id="openFilterBtn">[⚡ Filter]</button>
       </div>
       <div class="my-size-bar">
@@ -535,53 +707,53 @@
       <div class="product-grid" id="productGrid">
 
         <!-- Card 1 -->
-        <article class="product-card">
+        <article class="product-card" data-title="Structured Cotton Blazer" data-brand="MANGO" data-price="89.90">
           <div class="image-placeholder">
             <span class="image-text">[PRODUCT IMAGE]</span>
             <div class="scarcity-badge">Only Size M left</div>
           </div>
           <div class="brand-name">MANGO</div>
           <div class="item-title">Structured Cotton Blazer</div>
-          <div class="price-tag">$89.90</div>
+          <div class="price-tag">Php 3,499.00</div>
           <div class="size-availability">Size: S, M, L</div>
           <div class="peer-validation">🔥 240 people bought this week</div>
         </article>
 
         <!-- Card 2 -->
-        <article class="product-card">
+        <article class="product-card" data-title="Samba OG Sneakers" data-brand="ADIDAS" data-price="110.00">
           <div class="image-placeholder">
             <span class="image-text">[PRODUCT IMAGE]</span>
             <div class="scarcity-badge">Only 2 items left</div>
           </div>
           <div class="brand-name">ADIDAS</div>
           <div class="item-title">Samba OG Sneakers</div>
-          <div class="price-tag">$110.00</div>
+          <div class="price-tag">Php 5,899.00</div>
           <div class="size-availability">Size: S, M, L</div>
           <div class="peer-validation">🔥 512 people bought this week</div>
         </article>
 
         <!-- Card 3 -->
-        <article class="product-card">
+        <article class="product-card" data-title="High-Waist Denim Jeans" data-brand="PULL&BEAR" data-price="45.90">
           <div class="image-placeholder">
             <span class="image-text">[PRODUCT IMAGE]</span>
             <div class="scarcity-badge">Only Size M left</div>
           </div>
           <div class="brand-name">PULL&BEAR</div>
           <div class="item-title">High-Waist Denim Jeans</div>
-          <div class="price-tag">$45.90</div>
+          <div class="price-tag">Php 2,199.00</div>
           <div class="size-availability">Size: S, M, L</div>
           <div class="peer-validation">🔥 128 people bought this week</div>
         </article>
 
         <!-- Card 4 -->
-        <article class="product-card">
+        <article class="product-card" data-title="Oversized Linen Shirt" data-brand="ZARA" data-price="59.90">
           <div class="image-placeholder">
             <span class="image-text">[PRODUCT IMAGE]</span>
             <div class="scarcity-badge">Low Stock</div>
           </div>
           <div class="brand-name">ZARA</div>
           <div class="item-title">Oversized Linen Shirt</div>
-          <div class="price-tag">$59.90</div>
+          <div class="price-tag">Php 2,799.00</div>
           <div class="size-availability">Size: S, M, L</div>
           <div class="peer-validation">🔥 310 people bought this week</div>
         </article>
@@ -589,25 +761,59 @@
       </div>
     </main>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Fixed Bottom Navigation Bar -->
     <nav class="bottom-nav">
-      <button class="nav-item">
+      <button class="nav-item active" data-nav="home">
         <span class="nav-icon">🏠</span>
         <span>Home</span>
       </button>
-      <button class="nav-item">
+      <button class="nav-item" data-nav="search">
         <span class="nav-icon">🔎</span>
         <span>Search</span>
       </button>
-      <button class="nav-item">
+      <button class="nav-item" data-nav="bag">
         <span class="nav-icon">🛍️</span>
         <span>Bag</span>
       </button>
-      <button class="nav-item">
+      <button class="nav-item" data-nav="profile">
         <span class="nav-icon">👤</span>
         <span>Profile</span>
       </button>
     </nav>
+
+    <!-- LEFT CATEGORY DRAWER OVERLAY -->
+    <div class="drawer-overlay" id="leftDrawerOverlay">
+      <div class="left-drawer-content">
+        <div class="drawer-header">
+          <span style="font-weight: 900; font-size: 14px; letter-spacing: 1px;">CATEGORIES & MENU</span>
+          <button class="close-btn" id="closeLeftDrawerBtn">[X]</button>
+        </div>
+        <div style="flex: 1; overflow-y: auto;">
+          <button class="menu-link-item" onclick="selectCategoryMenu('Women')">Women <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategoryMenu('Men')">Men <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategoryMenu('Kids')">Kids <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategoryMenu('Luxury')">Luxury <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategoryMenu('Beauty')">Beauty <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategoryMenu('Sports')">Sports <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategoryMenu('Fashion')">Fashion <span>›</span></button>
+          <button class="menu-link-item" onclick="showToast('Opened Account & Login')">Login / Register <span>›</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SORT BY BOTTOM SHEET OVERLAY -->
+    <div class="drawer-overlay" id="sortDrawerOverlay">
+      <div class="sort-sheet">
+        <div class="sort-header">
+          <span>SORT BY</span>
+          <button class="close-btn" id="closeSortBtn">[X]</button>
+        </div>
+        <button class="sort-option" onclick="applySort('Popularity')">Popularity</button>
+        <button class="sort-option" onclick="applySort('Latest Arrivals')">Latest Arrivals</button>
+        <button class="sort-option" onclick="applySort('Price: Low to High')">Price: Low to High</button>
+        <button class="sort-option" onclick="applySort('Price: High to Low')">Price: High to Low</button>
+      </div>
+    </div>
 
     <!-- SCREEN 2: SLIDE-OUT FILTER DRAWER LAYOUT (ACTIVE SHEET OVERLAY) -->
     <div class="drawer-overlay" id="filterDrawer">
@@ -627,7 +833,12 @@
               <span>▶ BRAND</span>
             </button>
             <div class="accordion-body">
-              <p style="font-size: 11px; color: #666;">Brand options list...</p>
+              <div class="size-grid">
+                <label class="checkbox-label"><input type="checkbox" checked> Mango</label>
+                <label class="checkbox-label"><input type="checkbox"> Adidas</label>
+                <label class="checkbox-label"><input type="checkbox"> Zara</label>
+                <label class="checkbox-label"><input type="checkbox"> Pull&Bear</label>
+              </div>
             </div>
           </div>
 
@@ -655,7 +866,11 @@
               <span>▶ PRICE RANGE</span>
             </button>
             <div class="accordion-body">
-              <p style="font-size: 11px; color: #666;">Price slider or ranges...</p>
+              <div style="font-size: 11px; color: #666; display:flex; flex-direction:column; gap:8px;">
+                <label><input type="checkbox" checked> Under Php 2,500</label>
+                <label><input type="checkbox"> Php 2,500 - Php 5,000</label>
+                <label><input type="checkbox"> Above Php 5,000</label>
+              </div>
             </div>
           </div>
 
@@ -665,7 +880,12 @@
               <span>▶ COLOR</span>
             </button>
             <div class="accordion-body">
-              <p style="font-size: 11px; color: #666;">Color swatches...</p>
+              <div class="size-grid">
+                <label class="checkbox-label"><input type="checkbox"> Black</label>
+                <label class="checkbox-label"><input type="checkbox"> White</label>
+                <label class="checkbox-label"><input type="checkbox"> Blue</label>
+                <label class="checkbox-label"><input type="checkbox"> Pink</label>
+              </div>
             </div>
           </div>
 
@@ -683,6 +903,16 @@
 
   <!-- INTERACTIVE SCRIPTING -->
   <script>
+    // Toast Notification Helper
+    function showToast(message) {
+      const toast = document.getElementById('toastMessage');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const openFilterBtn = document.getElementById('openFilterBtn');
       const closeFilterBtn = document.getElementById('closeFilterBtn');
@@ -691,23 +921,61 @@
       const mySizeToggle = document.getElementById('mySizeToggle');
       const sizeBadge = document.getElementById('sizeBadge');
 
-      // Slide-Out Drawer Interaction Mechanics (<0.1s threshold handling)
-      const showDrawer = () => {
-        filterDrawer.classList.add('active');
-      };
+      const menuDrawerBtn = document.getElementById('menuDrawerBtn');
+      const leftDrawerOverlay = document.getElementById('leftDrawerOverlay');
+      const closeLeftDrawerBtn = document.getElementById('closeLeftDrawerBtn');
 
-      const hideDrawer = () => {
-        filterDrawer.classList.remove('active');
-      };
+      const openSortBtn = document.getElementById('openSortBtn');
+      const sortDrawerOverlay = document.getElementById('sortDrawerOverlay');
+      const closeSortBtn = document.getElementById('closeSortBtn');
 
-      openFilterBtn.addEventListener('click', showDrawer);
-      closeFilterBtn.addEventListener('click', hideDrawer);
-      applyFilterBtn.addEventListener('click', hideDrawer);
+      const brandLogoBtn = document.getElementById('brandLogoBtn');
+      const cartNavBtn = document.getElementById('cartNavBtn');
+      const mainSearchInput = document.getElementById('mainSearchInput');
 
-      // Close when clicking overlay backdrop directly
+      // Slide-Out Filter Drawer Mechanics
+      const showFilterDrawer = () => filterDrawer.classList.add('active');
+      const hideFilterDrawer = () => filterDrawer.classList.remove('active');
+
+      openFilterBtn.addEventListener('click', showFilterDrawer);
+      closeFilterBtn.addEventListener('click', hideFilterDrawer);
+      applyFilterBtn.addEventListener('click', () => {
+        hideFilterDrawer();
+        showToast("Filters applied successfully!");
+      });
+
       filterDrawer.addEventListener('click', (e) => {
-        if (e.target === filterDrawer) {
-          hideDrawer();
+        if (e.target === filterDrawer) hideFilterDrawer();
+      });
+
+      // Left Category Menu Drawer
+      menuDrawerBtn.addEventListener('click', () => leftDrawerOverlay.classList.add('left-active'));
+      closeLeftDrawerBtn.addEventListener('click', () => leftDrawerOverlay.classList.remove('left-active'));
+      leftDrawerOverlay.addEventListener('click', (e) => {
+        if (e.target === leftDrawerOverlay) leftDrawerOverlay.classList.remove('left-active');
+      });
+
+      // Sort Bottom Sheet
+      openSortBtn.addEventListener('click', () => sortDrawerOverlay.classList.add('sort-active'));
+      closeSortBtn.addEventListener('click', () => sortDrawerOverlay.classList.remove('sort-active'));
+      sortDrawerOverlay.addEventListener('click', (e) => {
+        if (e.target === sortDrawerOverlay) sortDrawerOverlay.classList.remove('sort-active');
+      });
+
+      // Brand Logo click resets view
+      brandLogoBtn.addEventListener('click', () => {
+        showToast("Refreshed ZALORA Home Feed");
+      });
+
+      // Cart navigation button
+      cartNavBtn.addEventListener('click', () => {
+        showToast("Opened Shopping Bag (2 items)");
+      });
+
+      // Search bar interactivity
+      mainSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          showToast(`Searching for: "${e.target.value}"`);
         }
       });
 
@@ -715,9 +983,42 @@
       mySizeToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
           sizeBadge.style.display = 'inline-block';
+          showToast('"My Size" filter active (Size M)');
         } else {
           sizeBadge.style.display = 'none';
+          showToast('"My Size" filter deactivated');
         }
+      });
+
+      // Category Pill Selection Interactivity
+      const categoryButtons = document.querySelectorAll('.cat-pill');
+      categoryButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          categoryButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const catName = btn.textContent;
+          showToast(`Switched category to: ${catName}`);
+        });
+      });
+
+      // Bottom Navigation items
+      const bottomNavItems = document.querySelectorAll('.bottom-nav .nav-item');
+      bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+          bottomNavItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          const navName = item.querySelector('span:last-child').textContent;
+          showToast(`Navigated to ${navName}`);
+        });
+      });
+
+      // Product cards interaction (add to bag simulation)
+      const productCards = document.querySelectorAll('.product-card');
+      productCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const title = card.getAttribute('data-title');
+          showToast(`Selected: ${title}`);
+        });
       });
     });
 
@@ -734,6 +1035,26 @@
         row.classList.add('expanded');
         labelSpan.textContent = labelSpan.textContent.replace('▶', '▼');
       }
+    }
+
+    // Category Menu Item Selection
+    function selectCategoryMenu(categoryName) {
+      document.getElementById('leftDrawerOverlay').classList.remove('left-active');
+      showToast(`Browsing ${categoryName} category`);
+      // Update active category pill if matches
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.textContent.toLowerCase() === categoryName.toLowerCase()) {
+          document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Sort Option Selection
+    function applySort(sortType) {
+      document.getElementById('sortDrawerOverlay').classList.remove('sort-active');
+      document.getElementById('openSortBtn').textContent = `[↕ ${sortType}]`;
+      showToast(`Sorted by: ${sortType}`);
     }
   </script>
 </body>
