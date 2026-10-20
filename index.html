@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZALORA Wireframe Prototype - Interactive & Extended</title>
+  <title>ZALORA Wireframe Prototype - Clean & Functional</title>
   <style>
     /* Global Reset & Typography */
     * {
@@ -90,12 +90,13 @@
       justify-content: center;
     }
 
-    /* Pinned Search Box */
+    /* Pinned Search Box Block */
     .search-block {
       padding: 10px 16px;
       background-color: #ffffff;
       border-bottom: 1px solid #e0e0e0;
       flex-shrink: 0;
+      position: relative;
     }
 
     .search-input {
@@ -113,40 +114,7 @@
       color: #777777;
     }
 
-    /* Category Navigation Bar (Desktop ref inspired: WOMEN, MEN, KIDS, LUXURY, BEAUTY, SPORTS, FASHION) */
-    .category-scroll-bar {
-      display: flex;
-      overflow-x: auto;
-      background-color: #ffffff;
-      border-bottom: 1px solid #e0e0e0;
-      padding: 0 12px;
-      flex-shrink: 0;
-      scrollbar-width: none; /* Firefox */
-    }
-    .category-scroll-bar::-webkit-scrollbar {
-      display: none; /* Safari and Chrome */
-    }
-
-    .cat-pill {
-      padding: 10px 12px;
-      background: none;
-      border: none;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      white-space: nowrap;
-      cursor: pointer;
-      color: #555555;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-    }
-
-    .cat-pill.active {
-      color: #111111;
-      border-bottom-color: #111111;
-    }
-
-    /* Sticky Floating Navigation & My Size Bar */
+    /* Sticky Floating Navigation Header & My Size Toggle */
     .sub-header-container {
       background-color: #ffffff;
       border-bottom: 1px solid #111111;
@@ -246,20 +214,29 @@
       transform: translateX(18px);
     }
 
-    /* Scrollable Main Content Frame */
+    /* Main Scrollable Viewport */
     .main-viewport {
       flex: 1;
       overflow-y: auto;
       padding: 12px;
       background-color: #ffffff;
+      position: relative;
     }
 
-    /* Dual-Column Product Matrix */
+    /* Active Tab Content Containers */
+    .tab-view {
+      display: none;
+    }
+    .tab-view.active {
+      display: block;
+    }
+
+    /* Dual-Column Product Grid */
     .product-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      padding-bottom: 60px; /* Space for bottom nav */
+      padding-bottom: 60px;
     }
 
     .product-card {
@@ -270,17 +247,17 @@
       flex-direction: column;
       background-color: #ffffff;
       cursor: pointer;
-      transition: transform 0.1s;
+      transition: transform 0.1s, box-shadow 0.1s;
+      position: relative;
     }
 
     .product-card:hover {
-      border-color: #000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .image-placeholder {
       width: 100%;
-      height: 140px;
+      height: 135px;
       background-color: #e5e5e5;
       border: 1px dashed #777777;
       display: flex;
@@ -292,7 +269,7 @@
     }
 
     .image-text {
-      font-size: 11px;
+      font-size: 10px;
       color: #555555;
       font-weight: 600;
     }
@@ -353,6 +330,19 @@
       gap: 4px;
     }
 
+    .add-to-bag-btn {
+      margin-top: 6px;
+      padding: 6px;
+      background-color: #111111;
+      color: #ffffff;
+      border: none;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 2px;
+      cursor: pointer;
+      width: 100%;
+    }
+
     /* Fixed Bottom Navigation Bar */
     .bottom-nav {
       position: absolute;
@@ -373,7 +363,7 @@
       flex-direction: column;
       align-items: center;
       text-decoration: none;
-      color: #777;
+      color: #777777;
       font-size: 10px;
       font-weight: 600;
       gap: 2px;
@@ -383,7 +373,7 @@
       transition: color 0.2s;
     }
 
-    .nav-item.active, .nav-item:hover {
+    .nav-item.active {
       color: #111111;
     }
 
@@ -391,8 +381,8 @@
       font-size: 16px;
     }
 
-    /* OVERLAYS & MODALS GENERAL */
-    .drawer-overlay, .modal-overlay {
+    /* OVERLAYS & MODALS */
+    .drawer-overlay {
       position: absolute;
       top: 0;
       left: 0;
@@ -405,12 +395,7 @@
       transition: opacity 0.08s ease-out, visibility 0.08s ease-out;
     }
 
-    .drawer-overlay.active, .modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    /* SLIDE-OUT FILTER DRAWER */
+    /* Filter Drawer (Slide from Right <0.1s) */
     .drawer-content {
       position: absolute;
       top: 0;
@@ -425,10 +410,61 @@
       box-shadow: -4px 0 16px rgba(0,0,0,0.2);
     }
 
+    .drawer-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
     .drawer-overlay.active .drawer-content {
       right: 0;
     }
 
+    /* Category Menu Drawer (Slide from Left) */
+    .left-drawer-content {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 80%;
+      height: 100%;
+      background-color: #ffffff;
+      border-right: 2px solid #111111;
+      display: flex;
+      flex-direction: column;
+      transition: left 0.08s ease-out;
+      box-shadow: 4px 0 16px rgba(0,0,0,0.2);
+    }
+
+    .drawer-overlay.left-active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .drawer-overlay.left-active .left-drawer-content {
+      left: 0;
+    }
+
+    /* Sort By Bottom Sheet */
+    .sort-sheet {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      background-color: #ffffff;
+      border-top: 2px solid #111111;
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      flex-direction: column;
+      transition: bottom 0.15s ease-out;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
+    }
+
+    .drawer-overlay.sort-active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .drawer-overlay.sort-active .sort-sheet {
+      bottom: 0;
+    }
+
+    /* General Drawer Controls */
     .drawer-header {
       height: 52px;
       padding: 0 16px;
@@ -453,6 +489,7 @@
       gap: 6px;
     }
 
+    /* Accordion Elements */
     .accordion-stack {
       flex: 1;
       overflow-y: auto;
@@ -532,78 +569,6 @@
       border-radius: 2px;
     }
 
-    /* SORT BY MODAL / BOTTOM SHEET */
-    .sort-sheet {
-      position: absolute;
-      bottom: -100%;
-      left: 0;
-      width: 100%;
-      background-color: #ffffff;
-      border-top: 2px solid #111111;
-      border-radius: 16px 16px 0 0;
-      display: flex;
-      flex-direction: column;
-      transition: bottom 0.2s ease-out;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
-    }
-
-    .drawer-overlay.sort-active {
-      visibility: visible;
-      opacity: 1;
-    }
-    .drawer-overlay.sort-active .sort-sheet {
-      bottom: 0;
-    }
-
-    .sort-header {
-      padding: 16px;
-      border-bottom: 1px solid #e0e0e0;
-      font-weight: 800;
-      font-size: 13px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .sort-option {
-      padding: 14px 16px;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 13px;
-      font-weight: 600;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-    }
-    .sort-option:hover {
-      background-color: #f9f9f9;
-    }
-
-    /* CATEGORY DRAWER (LEFT SIDE) */
-    .left-drawer-content {
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 80%;
-      height: 100%;
-      background-color: #ffffff;
-      border-right: 2px solid #111111;
-      display: flex;
-      flex-direction: column;
-      transition: left 0.08s ease-out;
-      box-shadow: 4px 0 16px rgba(0,0,0,0.2);
-    }
-    .drawer-overlay.left-active {
-      visibility: visible;
-      opacity: 1;
-    }
-    .drawer-overlay.left-active .left-drawer-content {
-      left: 0;
-    }
-
     .menu-link-item {
       padding: 16px;
       border-bottom: 1px solid #eee;
@@ -611,7 +576,7 @@
       font-weight: 700;
       text-transform: uppercase;
       background: none;
-      border-top: none; border-left: none; border-right: none;
+      border: none;
       width: 100%;
       text-align: left;
       cursor: pointer;
@@ -622,10 +587,25 @@
       background-color: #f5f5f5;
     }
 
-    /* NOTIFICATION TOAST */
+    .sort-option {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+      font-weight: 600;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+    .sort-option:hover {
+      background-color: #f9f9f9;
+    }
+
+    /* TOAST NOTIFICATION STACK */
     .toast {
       position: absolute;
-      top: 64px;
+      top: 60px;
       left: 50%;
       transform: translateX(-50%) translateY(-20px);
       background-color: #111111;
@@ -634,7 +614,7 @@
       font-size: 11px;
       font-weight: 700;
       border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       opacity: 0;
       visibility: hidden;
       transition: all 0.2s ease;
@@ -646,17 +626,39 @@
       visibility: visible;
       transform: translateX(-50%) translateY(0);
     }
+
+    /* BAG & PROFILE VIEW STYLES */
+    .bag-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 12px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 14px;
+      background-color: #111111;
+      color: #ffffff;
+      border: none;
+      font-weight: 800;
+      margin-top: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Notification Toast -->
-  <div class="toast" id="toastMessage">Action completed successfully</div>
+  <!-- Floating Feedback Toast -->
+  <div class="toast" id="toastMessage">Action completed</div>
 
-  <!-- Mobile Phone Container Viewport Frame -->
+  <!-- Mobile Phone Viewport Frame -->
   <div class="phone-container">
 
-    <!-- SCREEN 1: CLEAN CATALOG FEED -->
+    <!-- SCREEN 1: CLEAN CATALOG FEED & TOP BAR -->
     
     <!-- Top Bar Component -->
     <header class="top-bar">
@@ -673,18 +675,7 @@
       <input type="text" class="search-input" id="mainSearchInput" placeholder="Search brands, types, styles..." />
     </div>
 
-    <!-- Horizontal Category Scroll Bar (Updated with FASHION besides SPORTS) -->
-    <nav class="category-scroll-bar" id="categoryButtonBar">
-      <button class="cat-pill active" data-cat="women">Women</button>
-      <button class="cat-pill" data-cat="men">Men</button>
-      <button class="cat-pill" data-cat="kids">Kids</button>
-      <button class="cat-pill" data-cat="luxury">Luxury</button>
-      <button class="cat-pill" data-cat="beauty">Beauty</button>
-      <button class="cat-pill" data-cat="sports">Sports</button>
-      <button class="cat-pill" data-cat="fashion">Fashion</button>
-    </nav>
-
-    <!-- Floating Navigation & My Size Header -->
+    <!-- Sticky Floating Navigation Header & My Size Bar -->
     <div class="sub-header-container">
       <div class="floating-nav">
         <button class="nav-target" id="openSortBtn">[↕ Sort By]</button>
@@ -702,80 +693,60 @@
       </div>
     </div>
 
-    <!-- The Main Matrix (Product Grid) -->
-    <main class="main-viewport">
-      <div class="product-grid" id="productGrid">
+    <!-- MAIN VIEWPORT CONTENT SWITCHER -->
+    <main class="main-viewport" id="mainViewport">
 
-        <!-- Card 1 -->
-        <article class="product-card" data-title="Structured Cotton Blazer" data-brand="MANGO" data-price="89.90">
-          <div class="image-placeholder">
-            <span class="image-text">[PRODUCT IMAGE]</span>
-            <div class="scarcity-badge">Only Size M left</div>
-          </div>
-          <div class="brand-name">MANGO</div>
-          <div class="item-title">Structured Cotton Blazer</div>
-          <div class="price-tag">Php 3,499.00</div>
-          <div class="size-availability">Size: S, M, L</div>
-          <div class="peer-validation">🔥 240 people bought this week</div>
-        </article>
-
-        <!-- Card 2 -->
-        <article class="product-card" data-title="Samba OG Sneakers" data-brand="ADIDAS" data-price="110.00">
-          <div class="image-placeholder">
-            <span class="image-text">[PRODUCT IMAGE]</span>
-            <div class="scarcity-badge">Only 2 items left</div>
-          </div>
-          <div class="brand-name">ADIDAS</div>
-          <div class="item-title">Samba OG Sneakers</div>
-          <div class="price-tag">Php 5,899.00</div>
-          <div class="size-availability">Size: S, M, L</div>
-          <div class="peer-validation">🔥 512 people bought this week</div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="product-card" data-title="High-Waist Denim Jeans" data-brand="PULL&BEAR" data-price="45.90">
-          <div class="image-placeholder">
-            <span class="image-text">[PRODUCT IMAGE]</span>
-            <div class="scarcity-badge">Only Size M left</div>
-          </div>
-          <div class="brand-name">PULL&BEAR</div>
-          <div class="item-title">High-Waist Denim Jeans</div>
-          <div class="price-tag">Php 2,199.00</div>
-          <div class="size-availability">Size: S, M, L</div>
-          <div class="peer-validation">🔥 128 people bought this week</div>
-        </article>
-
-        <!-- Card 4 -->
-        <article class="product-card" data-title="Oversized Linen Shirt" data-brand="ZARA" data-price="59.90">
-          <div class="image-placeholder">
-            <span class="image-text">[PRODUCT IMAGE]</span>
-            <div class="scarcity-badge">Low Stock</div>
-          </div>
-          <div class="brand-name">ZARA</div>
-          <div class="item-title">Oversized Linen Shirt</div>
-          <div class="price-tag">Php 2,799.00</div>
-          <div class="size-availability">Size: S, M, L</div>
-          <div class="peer-validation">🔥 310 people bought this week</div>
-        </article>
-
+      <!-- VIEW 1: PRODUCT CATALOG MATRIX -->
+      <div class="tab-view active" id="catalogView">
+        <div class="product-grid" id="productGrid">
+          <!-- Products will be dynamically populated/filtered here -->
+        </div>
       </div>
+
+      <!-- VIEW 2: SHOPPING BAG VIEW -->
+      <div class="tab-view" id="bagView">
+        <h3 style="font-size: 15px; margin-bottom: 12px; font-weight: 800;">YOUR SHOPPING BAG</h3>
+        <div id="bagItemsContainer"></div>
+        <div style="margin-top: 20px; border-top: 2px solid #111111; padding-top: 12px;">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 14px;">
+            <span>TOTAL:</span>
+            <span id="bagTotalDisplay">Php 0.00</span>
+          </div>
+          <button class="checkout-btn" id="checkoutBtn">[ PROCEED TO CHECKOUT ]</button>
+        </div>
+      </div>
+
+      <!-- VIEW 3: USER PROFILE VIEW -->
+      <div class="tab-view" id="profileView">
+        <h3 style="font-size: 15px; margin-bottom: 12px; font-weight: 800;">USER PROFILE</h3>
+        <div style="padding: 12px; background: #f9f9f9; border: 1px solid #111111; border-radius: 4px; margin-bottom: 12px;">
+          <p style="font-weight: 700; font-size: 13px;">Jane Doe</p>
+          <p style="font-size: 11px; color: #666;">jane.doe@example.com</p>
+          <p style="font-size: 10px; color: #111; margin-top: 6px;">Saved Size: <strong>Medium (M)</strong></p>
+        </div>
+        <button class="menu-link-item" onclick="showToast('Opened Orders History')">My Orders <span>›</span></button>
+        <button class="menu-link-item" onclick="showToast('Opened Saved Wishlist')">Wishlist <span>›</span></button>
+        <button class="menu-link-item" onclick="showToast('Opened Saved Addresses')">Addresses <span>›</span></button>
+        <button class="menu-link-item" onclick="showToast('Logged out')">Logout <span>›</span></button>
+      </div>
+
     </main>
 
     <!-- Fixed Bottom Navigation Bar -->
     <nav class="bottom-nav">
-      <button class="nav-item active" data-nav="home">
+      <button class="nav-item active" id="navHome">
         <span class="nav-icon">🏠</span>
         <span>Home</span>
       </button>
-      <button class="nav-item" data-nav="search">
+      <button class="nav-item" id="navSearch">
         <span class="nav-icon">🔎</span>
         <span>Search</span>
       </button>
-      <button class="nav-item" data-nav="bag">
+      <button class="nav-item" id="navBag">
         <span class="nav-icon">🛍️</span>
         <span>Bag</span>
       </button>
-      <button class="nav-item" data-nav="profile">
+      <button class="nav-item" id="navProfile">
         <span class="nav-icon">👤</span>
         <span>Profile</span>
       </button>
@@ -785,18 +756,19 @@
     <div class="drawer-overlay" id="leftDrawerOverlay">
       <div class="left-drawer-content">
         <div class="drawer-header">
-          <span style="font-weight: 900; font-size: 14px; letter-spacing: 1px;">CATEGORIES & MENU</span>
+          <span style="font-weight: 900; font-size: 13px; letter-spacing: 1px;">CATEGORIES & MENU</span>
           <button class="close-btn" id="closeLeftDrawerBtn">[X]</button>
         </div>
         <div style="flex: 1; overflow-y: auto;">
-          <button class="menu-link-item" onclick="selectCategoryMenu('Women')">Women <span>›</span></button>
-          <button class="menu-link-item" onclick="selectCategoryMenu('Men')">Men <span>›</span></button>
-          <button class="menu-link-item" onclick="selectCategoryMenu('Kids')">Kids <span>›</span></button>
-          <button class="menu-link-item" onclick="selectCategoryMenu('Luxury')">Luxury <span>›</span></button>
-          <button class="menu-link-item" onclick="selectCategoryMenu('Beauty')">Beauty <span>›</span></button>
-          <button class="menu-link-item" onclick="selectCategoryMenu('Sports')">Sports <span>›</span></button>
-          <button class="menu-link-item" onclick="selectCategoryMenu('Fashion')">Fashion <span>›</span></button>
-          <button class="menu-link-item" onclick="showToast('Opened Account & Login')">Login / Register <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategory('Women')">Women <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategory('Men')">Men <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategory('Kids')">Kids <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategory('Luxury')">Luxury <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategory('Beauty')">Beauty <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategory('Sports')">Sports <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategory('Fashion')">Fashion <span>›</span></button>
+          <button class="menu-link-item" onclick="selectCategory('Trend')">Trend <span>›</span></button>
+          <button class="menu-link-item" onclick="switchTab('profile'); closeAllDrawers();">Login / Register <span>›</span></button>
         </div>
       </div>
     </div>
@@ -804,14 +776,14 @@
     <!-- SORT BY BOTTOM SHEET OVERLAY -->
     <div class="drawer-overlay" id="sortDrawerOverlay">
       <div class="sort-sheet">
-        <div class="sort-header">
-          <span>SORT BY</span>
+        <div class="drawer-header">
+          <span style="font-weight: 800; font-size: 13px;">SORT BY</span>
           <button class="close-btn" id="closeSortBtn">[X]</button>
         </div>
-        <button class="sort-option" onclick="applySort('Popularity')">Popularity</button>
-        <button class="sort-option" onclick="applySort('Latest Arrivals')">Latest Arrivals</button>
-        <button class="sort-option" onclick="applySort('Price: Low to High')">Price: Low to High</button>
-        <button class="sort-option" onclick="applySort('Price: High to Low')">Price: High to Low</button>
+        <button class="sort-option" onclick="applySort('default')">Popularity (Default)</button>
+        <button class="sort-option" onclick="applySort('low-high')">Price: Low to High</button>
+        <button class="sort-option" onclick="applySort('high-low')">Price: High to Low</button>
+        <button class="sort-option" onclick="applySort('brand')">Brand Name (A-Z)</button>
       </div>
     </div>
 
@@ -834,10 +806,12 @@
             </button>
             <div class="accordion-body">
               <div class="size-grid">
-                <label class="checkbox-label"><input type="checkbox" checked> Mango</label>
-                <label class="checkbox-label"><input type="checkbox"> Adidas</label>
-                <label class="checkbox-label"><input type="checkbox"> Zara</label>
-                <label class="checkbox-label"><input type="checkbox"> Pull&Bear</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-brand" value="MANGO"> MANGO</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-brand" value="ADIDAS"> ADIDAS</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-brand" value="PULL&BEAR"> PULL&BEAR</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-brand" value="ZARA"> ZARA</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-brand" value="NIKE"> NIKE</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-brand" value="H&M"> H&M</label>
               </div>
             </div>
           </div>
@@ -850,12 +824,12 @@
             <div class="accordion-body">
               <p style="font-size: 10px; color: #555; margin-bottom: 8px; font-weight: 600;">Apparel & Footwear Scales</p>
               <div class="size-grid">
-                <label class="checkbox-label"><input type="checkbox"> [ ] XS</label>
-                <label class="checkbox-label"><input type="checkbox"> [ ] S</label>
-                <label class="checkbox-label"><input type="checkbox" checked> [ ] M</label>
-                <label class="checkbox-label"><input type="checkbox"> [ ] L</label>
-                <label class="checkbox-label"><input type="checkbox"> [ ] XL</label>
-                <label class="checkbox-label"><input type="checkbox"> [ ] XXL</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-size" value="XS"> [ ] XS</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-size" value="S"> [ ] S</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-size" value="M"> [ ] M</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-size" value="L"> [ ] L</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-size" value="XL"> [ ] XL</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-size" value="XXL"> [ ] XXL</label>
               </div>
             </div>
           </div>
@@ -867,9 +841,8 @@
             </button>
             <div class="accordion-body">
               <div style="font-size: 11px; color: #666; display:flex; flex-direction:column; gap:8px;">
-                <label><input type="checkbox" checked> Under Php 2,500</label>
-                <label><input type="checkbox"> Php 2,500 - Php 5,000</label>
-                <label><input type="checkbox"> Above Php 5,000</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-price" value="2500"> Under Php 2,500</label>
+                <label class="checkbox-label"><input type="checkbox" class="filter-price" value="5000"> Under Php 5,000</label>
               </div>
             </div>
           </div>
@@ -901,128 +874,208 @@
 
   </div>
 
-  <!-- INTERACTIVE SCRIPTING -->
+  <!-- COMPLETE INTERACTIVE SCRIPTING DATA & MECHANICS -->
   <script>
-    // Toast Notification Helper
+    // Product Database Mapped to Categories, Sizes, Brands & Prices
+    const productsMaster = [
+      { id: 1, brand: 'MANGO', title: 'Structured Cotton Blazer', price: 3499, sizes: ['S', 'M', 'L'], category: 'Women', scarcity: 'Only Size M left', buys: 240 },
+      { id: 2, brand: 'ADIDAS', title: 'Samba OG Sneakers', price: 5899, sizes: ['S', 'M', 'L'], category: 'Sports', scarcity: 'Only 2 items left', buys: 512 },
+      { id: 3, brand: 'PULL&BEAR', title: 'High-Waist Denim Jeans', price: 2199, sizes: ['M', 'L'], category: 'Fashion', scarcity: 'Only Size M left', buys: 128 },
+      { id: 4, brand: 'ZARA', title: 'Oversized Linen Shirt', price: 2799, sizes: ['S', 'M', 'L', 'XL'], category: 'Trend', scarcity: 'Low Stock', buys: 310 },
+      { id: 5, brand: 'NIKE', title: 'Air Max Essential Running Shoes', price: 6295, sizes: ['M', 'L', 'XL'], category: 'Sports', scarcity: 'Only Size M left', buys: 430 },
+      { id: 6, brand: 'H&M', title: 'Cotton Poplin Strappy Dress', price: 1599, sizes: ['XS', 'S', 'M'], category: 'Women', scarcity: 'Popular Item', buys: 620 },
+      { id: 7, brand: 'ZARA', title: 'Metallic Cropped Trench Jacket', price: 4290, sizes: ['S', 'M'], category: 'Trend', scarcity: 'Trending Now', buys: 390 },
+      { id: 8, brand: 'MANGO', title: 'Satin Finish Evening Gown', price: 7990, sizes: ['M', 'L'], category: 'Luxury', scarcity: 'Limited Edition', buys: 95 }
+    ];
+
+    // State Management
+    let currentCategory = 'Women';
+    let currentSort = 'default';
+    let mySizeActive = false;
+    let searchQuery = '';
+    let cart = [
+      { id: 1, brand: 'MANGO', title: 'Structured Cotton Blazer', price: 3499 },
+      { id: 3, brand: 'PULL&BEAR', title: 'High-Waist Denim Jeans', price: 2199 }
+    ];
+
+    // Toast Function
     function showToast(message) {
       const toast = document.getElementById('toastMessage');
       toast.textContent = message;
       toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2000);
+      setTimeout(() => { toast.classList.remove('show'); }, 2000);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const openFilterBtn = document.getElementById('openFilterBtn');
-      const closeFilterBtn = document.getElementById('closeFilterBtn');
-      const applyFilterBtn = document.getElementById('applyFilterBtn');
-      const filterDrawer = document.getElementById('filterDrawer');
-      const mySizeToggle = document.getElementById('mySizeToggle');
-      const sizeBadge = document.getElementById('sizeBadge');
+    // Render Product Grid Matrix
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
 
-      const menuDrawerBtn = document.getElementById('menuDrawerBtn');
-      const leftDrawerOverlay = document.getElementById('leftDrawerOverlay');
-      const closeLeftDrawerBtn = document.getElementById('closeLeftDrawerBtn');
+      // Filter Logic
+      let list = productsMaster.filter(p => {
+        // Category Filter
+        const matchesCategory = (currentCategory === 'Trend' || currentCategory === 'Fashion') ? true : (p.category === currentCategory || currentCategory === 'Women');
+        
+        // Search Filter
+        const matchesSearch = searchQuery === '' || 
+          p.title.toLowerCase().includes(searchQuery) || 
+          p.brand.toLowerCase().includes(searchQuery) ||
+          p.category.toLowerCase().includes(searchQuery);
 
-      const openSortBtn = document.getElementById('openSortBtn');
-      const sortDrawerOverlay = document.getElementById('sortDrawerOverlay');
-      const closeSortBtn = document.getElementById('closeSortBtn');
+        // "My Size" Profile Filter
+        const matchesMySize = !mySizeActive || p.sizes.includes('M');
 
-      const brandLogoBtn = document.getElementById('brandLogoBtn');
-      const cartNavBtn = document.getElementById('cartNavBtn');
-      const mainSearchInput = document.getElementById('mainSearchInput');
+        // Drawer Brand Filters
+        const checkedBrands = Array.from(document.querySelectorAll('.filter-brand:checked')).map(cb => cb.value);
+        const matchesBrand = checkedBrands.length === 0 || checkedBrands.includes(p.brand);
 
-      // Slide-Out Filter Drawer Mechanics
-      const showFilterDrawer = () => filterDrawer.classList.add('active');
-      const hideFilterDrawer = () => filterDrawer.classList.remove('active');
+        // Drawer Size Filters
+        const checkedSizes = Array.from(document.querySelectorAll('.filter-size:checked')).map(cb => cb.value);
+        const matchesSize = checkedSizes.length === 0 || checkedSizes.some(s => p.sizes.includes(s));
 
-      openFilterBtn.addEventListener('click', showFilterDrawer);
-      closeFilterBtn.addEventListener('click', hideFilterDrawer);
-      applyFilterBtn.addEventListener('click', () => {
-        hideFilterDrawer();
-        showToast("Filters applied successfully!");
+        // Drawer Price Filters
+        const checkedPrices = Array.from(document.querySelectorAll('.filter-price:checked')).map(cb => parseInt(cb.value));
+        const matchesPrice = checkedPrices.length === 0 || checkedPrices.some(maxP => p.price <= maxP);
+
+        return matchesCategory && matchesSearch && matchesMySize && matchesBrand && matchesSize && matchesPrice;
       });
 
-      filterDrawer.addEventListener('click', (e) => {
-        if (e.target === filterDrawer) hideFilterDrawer();
+      // Sort Logic
+      if (currentSort === 'low-high') {
+        list.sort((a, b) => a.price - b.price);
+      } else if (currentSort === 'high-low') {
+        list.sort((a, b) => b.price - a.price);
+      } else if (currentSort === 'brand') {
+        list.sort((a, b) => a.brand.localeCompare(b.brand));
+      }
+
+      if (list.length === 0) {
+        grid.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 40px 0; font-size: 12px; color: #777;">No products match your criteria.</div>`;
+        return;
+      }
+
+      list.forEach(p => {
+        const card = document.createElement('article');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <div class="image-placeholder">
+            <span class="image-text">[${p.category.toUpperCase()}]</span>
+            <div class="scarcity-badge">${p.scarcity}</div>
+          </div>
+          <div class="brand-name">${p.brand}</div>
+          <div class="item-title">${p.title}</div>
+          <div class="price-tag">Php ${p.price.toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
+          <div class="size-availability">Size: ${p.sizes.join(', ')}</div>
+          <div class="peer-validation">🔥 ${p.buys} bought this week</div>
+          <button class="add-to-bag-btn" onclick="addToBag(event, ${p.id})">+ ADD TO BAG</button>
+        `;
+        card.addEventListener('click', (e) => {
+          if(!e.target.classList.contains('add-to-bag-btn')) {
+            showToast(`Opened ${p.brand} - ${p.title}`);
+          }
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    // Shopping Bag View Renderer
+    function renderBag() {
+      const container = document.getElementById('bagItemsContainer');
+      const badge = document.getElementById('cartCountBadge');
+      const totalDisplay = document.getElementById('bagTotalDisplay');
+
+      badge.textContent = cart.length;
+      container.innerHTML = '';
+
+      if (cart.length === 0) {
+        container.innerHTML = `<p style="font-size: 12px; color: #777; text-align: center; padding: 20px 0;">Your bag is empty.</p>`;
+        totalDisplay.textContent = 'Php 0.00';
+        return;
+      }
+
+      let total = 0;
+      cart.forEach((item, index) => {
+        total += item.price;
+        const row = document.createElement('div');
+        row.className = 'bag-item-row';
+        row.innerHTML = `
+          <div>
+            <strong>${item.brand}</strong> - ${item.title}
+            <div style="color: #666; font-size: 10px;">Size: M | Qty: 1</div>
+          </div>
+          <div style="text-align: right;">
+            <div>Php ${item.price.toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
+            <button onclick="removeFromBag(${index})" style="background:none; border:none; color:red; font-size:10px; cursor:pointer;">Remove</button>
+          </div>
+        `;
+        container.appendChild(row);
       });
 
-      // Left Category Menu Drawer
-      menuDrawerBtn.addEventListener('click', () => leftDrawerOverlay.classList.add('left-active'));
-      closeLeftDrawerBtn.addEventListener('click', () => leftDrawerOverlay.classList.remove('left-active'));
-      leftDrawerOverlay.addEventListener('click', (e) => {
-        if (e.target === leftDrawerOverlay) leftDrawerOverlay.classList.remove('left-active');
-      });
+      totalDisplay.textContent = `Php ${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+    }
 
-      // Sort Bottom Sheet
-      openSortBtn.addEventListener('click', () => sortDrawerOverlay.classList.add('sort-active'));
-      closeSortBtn.addEventListener('click', () => sortDrawerOverlay.classList.remove('sort-active'));
-      sortDrawerOverlay.addEventListener('click', (e) => {
-        if (e.target === sortDrawerOverlay) sortDrawerOverlay.classList.remove('sort-active');
-      });
+    // Add / Remove Cart Functions
+    function addToBag(event, id) {
+      event.stopPropagation();
+      const product = productsMaster.find(p => p.id === id);
+      if (product) {
+        cart.push(product);
+        renderBag();
+        showToast(`Added ${product.title} to Bag!`);
+      }
+    }
 
-      // Brand Logo click resets view
-      brandLogoBtn.addEventListener('click', () => {
-        showToast("Refreshed ZALORA Home Feed");
-      });
+    function removeFromBag(index) {
+      cart.splice(index, 1);
+      renderBag();
+      showToast(`Removed item from Bag`);
+    }
 
-      // Cart navigation button
-      cartNavBtn.addEventListener('click', () => {
-        showToast("Opened Shopping Bag (2 items)");
-      });
+    // Tab View Navigation
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
 
-      // Search bar interactivity
-      mainSearchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          showToast(`Searching for: "${e.target.value}"`);
+      if (tabName === 'home' || tabName === 'search') {
+        document.getElementById('catalogView').classList.add('active');
+        document.getElementById(tabName === 'home' ? 'navHome' : 'navSearch').classList.add('active');
+        if(tabName === 'search') {
+          document.getElementById('mainSearchInput').focus();
         }
-      });
+      } else if (tabName === 'bag') {
+        document.getElementById('bagView').classList.add('active');
+        document.getElementById('navBag').classList.add('active');
+      } else if (tabName === 'profile') {
+        document.getElementById('profileView').classList.add('active');
+        document.getElementById('navProfile').classList.add('active');
+      }
+    }
 
-      // "My Size" Toggle Switch Functionality
-      mySizeToggle.addEventListener('change', (e) => {
-        if (e.target.checked) {
-          sizeBadge.style.display = 'inline-block';
-          showToast('"My Size" filter active (Size M)');
-        } else {
-          sizeBadge.style.display = 'none';
-          showToast('"My Size" filter deactivated');
-        }
-      });
+    // Drawer Helpers
+    function closeAllDrawers() {
+      document.getElementById('filterDrawer').classList.remove('active');
+      document.getElementById('leftDrawerOverlay').classList.remove('left-active');
+      document.getElementById('sortDrawerOverlay').classList.remove('sort-active');
+    }
 
-      // Category Pill Selection Interactivity
-      const categoryButtons = document.querySelectorAll('.cat-pill');
-      categoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          categoryButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const catName = btn.textContent;
-          showToast(`Switched category to: ${catName}`);
-        });
-      });
+    // Category Selector
+    function selectCategory(catName) {
+      currentCategory = catName;
+      renderProducts();
+      closeAllDrawers();
+      switchTab('home');
+      showToast(`Browsing category: ${catName}`);
+    }
 
-      // Bottom Navigation items
-      const bottomNavItems = document.querySelectorAll('.bottom-nav .nav-item');
-      bottomNavItems.forEach(item => {
-        item.addEventListener('click', () => {
-          bottomNavItems.forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          const navName = item.querySelector('span:last-child').textContent;
-          showToast(`Navigated to ${navName}`);
-        });
-      });
+    // Sort Function
+    function applySort(type) {
+      currentSort = type;
+      renderProducts();
+      closeAllDrawers();
+      showToast(`Sorted catalog by selection`);
+    }
 
-      // Product cards interaction (add to bag simulation)
-      const productCards = document.querySelectorAll('.product-card');
-      productCards.forEach(card => {
-        card.addEventListener('click', () => {
-          const title = card.getAttribute('data-title');
-          showToast(`Selected: ${title}`);
-        });
-      });
-    });
-
-    // Accordion Toggle Helper Function
+    // Accordion Toggle Mechanics
     function toggleAccordion(button) {
       const row = button.parentElement;
       const isExpanded = row.classList.contains('expanded');
@@ -1037,25 +1090,82 @@
       }
     }
 
-    // Category Menu Item Selection
-    function selectCategoryMenu(categoryName) {
-      document.getElementById('leftDrawerOverlay').classList.remove('left-active');
-      showToast(`Browsing ${categoryName} category`);
-      // Update active category pill if matches
-      document.querySelectorAll('.cat-pill').forEach(btn => {
-        if (btn.textContent.toLowerCase() === categoryName.toLowerCase()) {
-          document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+    // DOM Event Listeners Initializer
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      renderBag();
+
+      // Filter Drawer Controls (<0.1s threshold trigger)
+      document.getElementById('openFilterBtn').addEventListener('click', () => {
+        document.getElementById('filterDrawer').classList.add('active');
+      });
+      document.getElementById('closeFilterBtn').addEventListener('click', closeAllDrawers);
+      document.getElementById('applyFilterBtn').addEventListener('click', () => {
+        renderProducts();
+        closeAllDrawers();
+        showToast('Filters applied!');
+      });
+
+      // Left Drawer Category Menu Controls
+      document.getElementById('menuDrawerBtn').addEventListener('click', () => {
+        document.getElementById('leftDrawerOverlay').classList.add('left-active');
+      });
+      document.getElementById('closeLeftDrawerBtn').addEventListener('click', closeAllDrawers);
+
+      // Sort Sheet Controls
+      document.getElementById('openSortBtn').addEventListener('click', () => {
+        document.getElementById('sortDrawerOverlay').classList.add('sort-active');
+      });
+      document.getElementById('closeSortBtn').addEventListener('click', closeAllDrawers);
+
+      // Backdrop Overlay Clicks to Close
+      ['filterDrawer', 'leftDrawerOverlay', 'sortDrawerOverlay'].forEach(id => {
+        document.getElementById(id).addEventListener('click', (e) => {
+          if (e.target.id === id) closeAllDrawers();
+        });
+      });
+
+      // Brand Logo Home Action
+      document.getElementById('brandLogoBtn').addEventListener('click', () => {
+        selectCategory('Women');
+      });
+
+      // Top Cart Icon Action
+      document.getElementById('cartNavBtn').addEventListener('click', () => {
+        switchTab('bag');
+      });
+
+      // Search Bar Live Keypress Listener
+      document.getElementById('mainSearchInput').addEventListener('input', (e) => {
+        searchQuery = e.target.value.toLowerCase();
+        renderProducts();
+      });
+
+      // "My Size" Toggle Switch Mechanics
+      document.getElementById('mySizeToggle').addEventListener('change', (e) => {
+        mySizeActive = e.target.checked;
+        document.getElementById('sizeBadge').style.display = mySizeActive ? 'inline-block' : 'none';
+        renderProducts();
+        showToast(mySizeActive ? '"My Size" profile active (Size M)' : '"My Size" profile deactivated');
+      });
+
+      // Bottom Navigation Buttons Event Listeners
+      document.getElementById('navHome').addEventListener('click', () => switchTab('home'));
+      document.getElementById('navSearch').addEventListener('click', () => switchTab('search'));
+      document.getElementById('navBag').addEventListener('click', () => switchTab('bag'));
+      document.getElementById('navProfile').addEventListener('click', () => switchTab('profile'));
+
+      // Checkout Button
+      document.getElementById('checkoutBtn').addEventListener('click', () => {
+        if(cart.length === 0) {
+          showToast('Bag is empty!');
+        } else {
+          cart = [];
+          renderBag();
+          showToast('Order placed successfully! Thank you.');
         }
       });
-    }
-
-    // Sort Option Selection
-    function applySort(sortType) {
-      document.getElementById('sortDrawerOverlay').classList.remove('sort-active');
-      document.getElementById('openSortBtn').textContent = `[↕ ${sortType}]`;
-      showToast(`Sorted by: ${sortType}`);
-    }
+    });
   </script>
 </body>
 </html>
